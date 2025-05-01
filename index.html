@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rule Creation - Medical Billing NFP</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="practice-selector">
+            <label>
+                Practice:
+                <select name="practice" required>
+                    <option value="">Select Practice</option>
+                </select>
+            </label>
+        </div>
+        <h1>Rule Creation</h1>
+        <form id="rule-form">
+            <section class="rule-details">                
+                <div class="inline-fields">
+                    <div class="field-group">
+                        <label for="ruleName">Rule Name <span class="required">*</span></label>
+                        <input type="text" name="ruleName" id="ruleName" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="description">Description:</label>
+                        <textarea name="description" rows="2" id="description"></textarea>
+                    </div>
+                </div>
+                <div class="inline-fields">
+                    <div class="field-group">
+                        <label for="priority">Priority <span class="required">*</span></label>
+                        <div class="field-group">
+                        <input type="number" name="priority" id="priority" required min="1" max="100" value="50">
+                        <span>(1-100, lower = higher)</span>
+                    </div>
+                    </div>
+                    <div class="field-group">
+                        <label for="status">Status:</label>
+                        <div class="field-group-status">
+                            <label>
+                        <input type="checkbox" name="status" id="status" checked> 
+                        <span>Active</span>
+                        </label>
+                    </div>
+                    </div>
+                </div>
+            </section>
+
+            <div style="width: 70%; display: inline-block; ">
+            <section class="conditions">
+                <h2>If:</h2>
+                <div id="condition-groups">
+                    <!-- Condition groups go here -->
+                </div>
+                <button type="button" id="add-condition-group" class="add-button">+ Add Condition Group</button>
+            </section>
+
+            <section class="actions">
+                <h2>Then:</h2>
+                <div id="actions-list">
+                    <!-- Action rows go here -->
+                </div>
+                <button type="button" id="add-action" class="add-button">+ Add Action</button>
+            </section>
+        </div>
+        <div style="width: 29%; vertical-align: top; display: inline-block;">
+            <div class="rule-preview">
+                <h3>Rule Preview</h3>
+                <pre id="rule-preview-text">(Rule will appear here)</pre>
+            </div>
+            <div class="sql-preview">
+                <h3>SQL WHERE Clause</h3>
+                <pre id="sql-preview-text">(SQL WHERE clause will appear here)</pre>
+            </div>
+        </div>
+            <div class="quick-rule-templates" style="display: none;">
+                <h3>Quick Rule Templates</h3>
+                <button type="button" class="quick-rule" data-template="atleast-one-cpt">
+                    At least one CPT code
+                    <span class="quick-example">Example: CPT/Procedure Code Exists</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="atleast-one-icd">
+                    At least one ICD-10 code
+                    <span class="quick-example">Example: Diagnosis/ICD-10 Code Exists</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="multiple-cpt">
+                    Multiple CPT codes
+                    <span class="quick-example">Example: CPT/Procedure Code In List</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="multiple-icd">
+                    Multiple ICD-10 codes
+                    <span class="quick-example">Example: Diagnosis/ICD-10 Code In List</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="date-range">
+                    Date range
+                    <span class="quick-example">Example: DOS From Between [dates]</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="amount-range">
+                    Amount range
+                    <span class="quick-example">Example: Total Amount Between [values]</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="units-range">
+                    Units range
+                    <span class="quick-example">Example: Units Between [values]</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="missing-modifier">
+                    Missing modifier
+                    <span class="quick-example">Example: Modifier 1 Is Empty</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="invalid-zip">
+                    Invalid ZIP code
+                    <span class="quick-example">Example: Patient ZIP Is Invalid Format</span>
+                </button>
+                <button type="button" class="quick-rule" data-template="missing-insurance">
+                    Missing insurance
+                    <span class="quick-example">Example: Insurance Name Is Empty</span>
+                </button>
+            </div>
+
+            <div class="quick-claim-templates" style="display: none;">
+                <h3>Quick Claim Templates</h3>
+                <button type="button" class="quick-claim" data-template="standard-office-visit">
+                    Standard Office Visit
+                    <span class="quick-example">CPT: 99213, ICD: J02.9, Charge: $125</span>
+                </button>
+                <button type="button" class="quick-claim" data-template="preventive-visit">
+                    Preventive Visit
+                    <span class="quick-example">CPT: 99395, ICD: Z00.00, Charge: $185</span>
+                </button>
+                <button type="button" class="quick-claim" data-template="consultation">
+                    Consultation
+                    <span class="quick-example">CPT: 99243, ICD: R07.9, Charge: $225</span>
+                </button>
+                <button type="button" class="quick-claim" data-template="minor-procedure">
+                    Minor Procedure
+                    <span class="quick-example">CPT: 12001, ICD: S01.81XA, Charge: $350</span>
+                </button>
+                <button type="button" class="quick-claim" data-template="lab-work">
+                    Lab Work
+                    <span class="quick-example">CPT: 80053, ICD: R79.89, Charge: $95</span>
+                </button>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="save">Save</button>
+                <button type="button" id="save-test">Save & Test</button>
+                <button type="button" id="cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
