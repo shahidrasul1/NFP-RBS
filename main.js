@@ -1,51 +1,55 @@
 $(document).ready(function() {
     // Expanded operator sets for each field (including ICD, CPT, Modifiers)
     const operators = {
-        'CPT/Procedure Code': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List', 'Exists', 'Does Not Exist'],
-        'Diagnosis/ICD-10 Code': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List', 'Exists', 'Does Not Exist'],
-        'Rendering Provider': ['Exists', 'Does Not Exist'],
-        'Sup. Provider': ['Exists', 'Does Not Exist'],
-        'Ordering Provider': ['Exists', 'Does Not Exist'],
-        'Ref. Provider': ['Exists', 'Does Not Exist'],
-        'Service Location': ['Exists', 'Does Not Exist'],
-        'Units': ['Equals', 'Not Equals', 'Greater Than', 'Less Than', 'Between'],
-        'Modifier 1': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List'],
-        'Modifier 2': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List'],
-        'Modifier 3': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List'],
-        'Modifier 4': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List'],
-        'Charge Amount': ['Equals', 'Greater Than', 'Less Than', 'Between'],
-        'Primary Diagnosis Code': ['Equals', 'Not Equals', 'Starts With', 'Ends With', 'In List', 'Not In List'],
-        'Service Date': ['Equals', 'Before', 'After', 'Between'],
+        'CPT/Procedure Code': ['Does Not Exist', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List'],
+        'Diagnosis/ICD-10 Code': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+        'Rendering Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+        'Sup. Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+        'Ordering Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+        'Ref. Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+        'Service Location': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+        'Units': ['Between', 'Equals', 'Greater Than', 'Less Than'],
+        'Modifier 1': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+        'Modifier 2': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+        'Modifier 3': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+        'Modifier 4': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+        'Charge Amount': ['Between', 'Equals', 'Greater Than', 'Less Than'],
+        'Primary Diagnosis Code': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+        'Service Date': ['After', 'Before', 'Between', 'Equals'],
         'Place of Service': ['Equals', 'Not Equals'],
         'Provider Type': ['Equals', 'Not Equals'],
-        'Patient Age': ['Equals', 'Greater Than', 'Less Than', 'Between'],
-        'Patient Gender': ['Equals', 'Not Equals'],
-        'Patient ZIP': ['Is Empty', 'Is Invalid Format', 'Has Valid Format', 'Equals', 'In List', 'Not In List'],
-        'Address 1': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains', 'Starts With', 'Ends With'],
-        'Address 2': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains', 'Starts With', 'Ends With'],
-        'Phone Number': ['Is Empty', 'Is Not Empty', 'Equals', 'Is Valid Format', 'Is Invalid Format'],
-        'Work Phone Number': ['Is Empty', 'Is Not Empty', 'Equals', 'Is Valid Format', 'Is Invalid Format'],
-        'Mobile Number': ['Is Empty', 'Is Not Empty', 'Equals', 'Is Valid Format', 'Is Invalid Format'],
-        'Email': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains', 'Is Valid Format', 'Is Invalid Format'],
-        'First Name': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains', 'Starts With', 'Ends With'],
-        'Last Name': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains', 'Starts With', 'Ends With'],
-        'Date of Birth': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between'],
-        'SSN': ['Is Empty', 'Is Not Empty', 'Equals', 'Is Valid Format', 'Is Invalid Format'],
-        'Marital Status': ['Is Empty', 'Is Not Empty', 'Equals', 'In List'],
-        'DOS From': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between'],
-        'DOS To': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between'],
-        'Total Amount': ['Is Empty', 'Is Not Empty', 'Equals', 'Greater Than', 'Less Than', 'Between'],
-        'Middle Name': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With']
+        'Patient Age': ['Between', 'Equals', 'Greater Than', 'Less Than'],
+        'Gender': ['Equals', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+        'Zip Code': ['Equals', 'Has Valid Format', 'In List', 'Is Empty', 'Is Invalid Format', 'Not In List'],
+        'Address 1': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'Address 2': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'Phone Number': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
+        'Work Phone Number': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
+        'Mobile Number': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
+        'Email': ['Contains', 'Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
+        'First Name': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'Last Name': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'Date of Birth': ['After', 'Before', 'Between', 'Equals', 'Is Empty', 'Is Not Empty'],
+        'SSN': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
+        'Marital Status': ['Equals', 'In List', 'Is Empty', 'Is Not Empty'],
+        'DOS From': ['After', 'Before', 'Between', 'Equals', 'Is Empty', 'Is Not Empty'],
+        'DOS To': ['After', 'Before', 'Between', 'Equals', 'Is Empty', 'Is Not Empty'],
+        'Total Amount': ['Between', 'Equals', 'Greater Than', 'Is Empty', 'Is Not Empty', 'Less Than'],
+        'Middle Name': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'City': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'State': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+        'POS': ['Equals', 'Is Empty', 'Is Not Empty', 'Not Equals']
     };
     // Value input type for each field
     const valueInputType = {
         'CPT/Procedure Code': 'text',
         'Diagnosis/ICD-10 Code': 'text',
-        'Rendering Provider': 'text',
-        'Sup. Provider': 'text',
-        'Ordering Provider': 'text',
-        'Ref. Provider': 'text',
-        'Service Location': 'text',
+        'Rendering Provider': 'select',
+        'Sup. Provider': 'select',
+        'Ordering Provider': 'select',
+        'Ref. Provider': 'select',
+        'Service Location': 'select',
+        'POS': 'select',        
         'Units': 'number',
         'Modifier 1': 'text',
         'Modifier 2': 'text',
@@ -57,8 +61,8 @@ $(document).ready(function() {
         'Place of Service': 'select',
         'Provider Type': 'text',
         'Patient Age': 'number',
-        'Patient Gender': 'select',
-        'Patient ZIP': 'text',
+        'Gender': 'select',
+        'Zip Code': 'text',
         'Address 1': 'text',
         'Address 2': 'text',
         'Phone Number': 'text',
@@ -115,12 +119,126 @@ $(document).ready(function() {
         // Return empty for these operators regardless of field
         if (operator === 'Is Empty' || operator === 'Is Not Empty' || 
             operator === 'Is Valid Format' || operator === 'Is Invalid Format' ||
-            operator === 'Exists') {
+            operator === 'Exists' || operator === 'Does Not Exist') {
             return '';
         }
 
         // Handle specific field types
-        if (field === 'Patient ZIP') {
+        if (field === 'Gender') {
+            if (operator === 'Equals' || operator === 'Not Equals') {
+                return `<select class="value-input">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>`;
+            }
+        } else if (field === 'Rendering Provider' || field === 'Sup. Provider' || 
+                   field === 'Ordering Provider' || field === 'Ref. Provider') {
+            if (operator === 'Equals' || operator === 'Not Equals') {
+                return `<select class="value-input">
+                    <option value="">Select ${field}</option>
+                    <option value="Provider1">Provider 1</option>
+                    <option value="Provider2">Provider 2</option>
+                    <option value="Provider3">Provider 3</option>
+                </select>`;
+            }
+        } else if (field === 'Diagnosis/ICD-10 Code') {
+            if (operator === 'Equals' || operator === 'Not Equals' || operator === 'Starts With' || operator === 'Ends With') {
+                return `<input type="text" class="value-input" placeholder="Enter ICD-10 Code">
+                       <div class="input-help">Format: A00.0</div>`;
+            } else if (operator === 'In List' || operator === 'Not In List') {
+                return `<div class="list-input-container">
+                    <input type="text" class="value-input list-input" placeholder="Enter ICD-10 codes separated by commas">
+                    <div class="input-help">Enter multiple ICD-10 codes separated by commas (e.g., A00.0, B01.1)</div>
+                </div>`;
+            }
+        } else if (field === 'CPT/Procedure Code') {
+            if (operator === 'Equals' || operator === 'Not Equals' || operator === 'Starts With' || operator === 'Ends With') {
+                return `<input type="text" class="value-input" placeholder="Enter CPT Code">
+                       <div class="input-help">Format: 99213</div>`;
+            } else if (operator === 'In List' || operator === 'Not In List') {
+                return `<div class="list-input-container">
+                    <input type="text" class="value-input list-input" placeholder="Enter CPT codes separated by commas">
+                    <div class="input-help">Enter multiple CPT codes separated by commas (e.g., 99213, 99214)</div>
+                </div>`;
+            }
+        } else if (field === 'Modifier 1' || field === 'Modifier 2' || field === 'Modifier 3' || field === 'Modifier 4') {
+            if (operator === 'Equals' || operator === 'Not Equals' || operator === 'Starts With') {
+                return `<input type="text" class="value-input" placeholder="Enter Modifier">
+                       <div class="input-help">Format: 25</div>`;
+            } else if (operator === 'In List' || operator === 'Not In List') {
+                return `<div class="list-input-container">
+                    <input type="text" class="value-input list-input" placeholder="Enter modifiers separated by commas">
+                    <div class="input-help">Enter multiple modifiers separated by commas (e.g., 25, 59)</div>
+                </div>`;
+            }
+        } else if (field === 'POS' || field === 'Service Location') {
+            if (operator === 'Equals' || operator === 'Not Equals') {
+                if (field === 'POS') {
+                    return `<select class="value-input" style="width: 100px;">
+                        <option value="">Select POS</option>
+                        <option value="11">Office</option>
+                        <option value="21">Inpatient Hospital</option>
+                        <option value="22">Outpatient Hospital</option>
+                        <option value="23">Emergency Room</option>
+                        <option value="24">Ambulatory Surgical Center</option>
+                        <option value="31">Skilled Nursing Facility</option>
+                        <option value="32">Nursing Facility</option>
+                        <option value="33">Custodial Care Facility</option>
+                        <option value="34">Hospice</option>
+                        <option value="41">Ambulance - Land</option>
+                        <option value="42">Ambulance - Air or Water</option>
+                        <option value="49">Independent Clinic</option>
+                        <option value="50">Federally Qualified Health Center</option>
+                        <option value="51">Inpatient Psychiatric Facility</option>
+                        <option value="52">Psychiatric Facility Partial Hospitalization</option>
+                        <option value="53">Community Mental Health Center</option>
+                        <option value="54">Intermediate Care Facility/Individuals with Intellectual Disabilities</option>
+                        <option value="55">Residential Substance Abuse Treatment Facility</option>
+                        <option value="56">Psychiatric Residential Treatment Center</option>
+                        <option value="57">Non-residential Substance Abuse Treatment Facility</option>
+                        <option value="60">Mass Immunization Center</option>
+                        <option value="61">Comprehensive Inpatient Rehabilitation Facility</option>
+                        <option value="62">Comprehensive Outpatient Rehabilitation Facility</option>
+                        <option value="65">End-Stage Renal Disease Treatment Facility</option>
+                        <option value="71">State or Local Public Health Clinic</option>
+                        <option value="72">Rural Health Clinic</option>
+                        <option value="81">Independent Laboratory</option>
+                        <option value="99">Other Place of Service</option>
+                    </select>`;
+                } else {
+                    return `<select class="value-input" style="width: 200px;" data-searchable="true">
+                        <option value="">Select Service Location</option>
+                        <optgroup label="Northeast">
+                            <option value="New York, NY">New York, NY</option>
+                            <option value="Boston, MA">Boston, MA</option>
+                            <option value="Philadelphia, PA">Philadelphia, PA</option>
+                            <option value="Washington, DC">Washington, DC</option>
+                        </optgroup>
+                        <optgroup label="South">
+                            <option value="Houston, TX">Houston, TX</option>
+                            <option value="Dallas, TX">Dallas, TX</option>
+                            <option value="Atlanta, GA">Atlanta, GA</option>
+                            <option value="Miami, FL">Miami, FL</option>
+                            <option value="Charlotte, NC">Charlotte, NC</option>
+                        </optgroup>
+                        <optgroup label="Midwest">
+                            <option value="Chicago, IL">Chicago, IL</option>
+                            <option value="Detroit, MI">Detroit, MI</option>
+                            <option value="Minneapolis, MN">Minneapolis, MN</option>
+                            <option value="St. Louis, MO">St. Louis, MO</option>
+                        </optgroup>
+                        <optgroup label="West">
+                            <option value="Los Angeles, CA">Los Angeles, CA</option>
+                            <option value="San Francisco, CA">San Francisco, CA</option>
+                            <option value="Seattle, WA">Seattle, WA</option>
+                            <option value="Denver, CO">Denver, CO</option>
+                            <option value="Phoenix, AZ">Phoenix, AZ</option>
+                        </optgroup>
+                    </select>`;
+                }
+            }
+        } else if (field === 'Zip Code') {
             switch (operator) {
                 case 'Equals':
                     return `<input type="text" class="value-input" placeholder="Enter ZIP (e.g., 12345 or 12345-1234)" pattern="\\d{5}(-\\d{4})?">
@@ -442,6 +560,7 @@ $(document).ready(function() {
         'Patient Demographics': {
             'Address 1': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
             'Address 2': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
+            'City': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
             'Date of Birth': ['After', 'Before', 'Between', 'Equals', 'Is Empty', 'Is Not Empty'],
             'Email': ['Contains', 'Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
             'First Name': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
@@ -449,32 +568,36 @@ $(document).ready(function() {
             'Marital Status': ['Equals', 'In List', 'Is Empty', 'Is Not Empty'],
             'Middle Name': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
             'Mobile Number': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
-            'Patient ZIP': ['Equals', 'Has Valid Format', 'In List', 'Is Empty', 'Is Invalid Format'],
+            'Gender': ['Equals', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+            'Zip Code': ['Equals', 'Has Valid Format', 'In List', 'Is Empty', 'Is Invalid Format', 'Not In List'],
             'Phone Number': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
             'SSN': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format'],
+            'State': ['Contains', 'Ends With', 'Equals', 'Is Empty', 'Is Not Empty', 'Starts With'],
             'Work Phone Number': ['Equals', 'Is Empty', 'Is Invalid Format', 'Is Not Empty', 'Is Valid Format']
         },
-        'Patient Insurance': {
-            'Effective Date': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between'],
-            'Group Number': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains'],
-            'Insurance Name': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains'],
-            'Insurance Type': ['Equals', 'In List', 'Not In List'],
-            'Member ID': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains'],
-            'Network Status': ['Equals', 'In List', 'Not In List'],
-            'Plan Name': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains'],
-            'Policy Holder': ['Is Empty', 'Is Not Empty', 'Equals', 'Contains'],
-            'Termination Date': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between']
+        'Billing Provider': {
+            'Rendering Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+            'Sup. Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+            'Ordering Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+            'Ref. Provider': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+            'Service Location': ['Does Not Exist', 'Equals', 'Exists', 'Is Empty', 'Is Not Empty', 'Not Equals'],
+            'POS': ['Equals', 'Is Empty', 'Is Not Empty', 'Not Equals']
+        },
+        'Diagnosis/ICD-10 Codes': {
+            'Diagnosis/ICD-10 Code': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With']
         },
         'Charges': {
-            'CPT/Procedure Code': ['Equals', 'In List', 'Not In List', 'Exists'],
-            'Charge Amount': ['Equals', 'Greater Than', 'Less Than', 'Between'],
-            'Diagnosis/ICD-10 Code': ['Equals', 'In List', 'Not In List', 'Exists'],
-            'DOS From': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between'],
-            'DOS To': ['Is Empty', 'Is Not Empty', 'Equals', 'Before', 'After', 'Between'],
-            'Modifier 1': ['Equals', 'In List', 'Not In List', 'Starts With'],
-            'Modifier 2': ['Equals', 'In List', 'Not In List', 'Starts With'],
-            'Total Amount': ['Is Empty', 'Is Not Empty', 'Equals', 'Greater Than', 'Less Than', 'Between'],
-            'Units': ['Equals', 'Greater Than', 'Less Than', 'Between']
+            'CPT/Procedure Code': ['Does Not Exist', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List'],
+            'Charge Amount': ['Between', 'Equals', 'Greater Than', 'Less Than'],
+            'DOS From': ['After', 'Before', 'Between', 'Equals', 'Is Empty', 'Is Not Empty'],
+            'DOS To': ['After', 'Before', 'Between', 'Equals', 'Is Empty', 'Is Not Empty'],
+            'Modifier 1': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+            'Modifier 2': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+            'Modifier 3': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+            'Modifier 4': ['Does Not Exist', 'Ends With', 'Equals', 'Exists', 'In List', 'Not Equals', 'Not In List', 'Starts With'],
+            'Total Amount': ['Between', 'Equals', 'Greater Than', 'Is Empty', 'Is Not Empty', 'Less Than'],
+            'Units': ['Between', 'Equals', 'Greater Than', 'Less Than'],
+            'POS': ['Equals', 'Is Empty', 'Is Not Empty', 'Not Equals']
         }
     };
 
@@ -696,7 +819,7 @@ $(document).ready(function() {
             },
             'invalid-zip': {
                 section: 'Patient Demographics',
-                field: 'Patient ZIP',
+                field: 'Zip Code',
                 operator: 'Is Invalid Format'
             },
             'missing-insurance': {
